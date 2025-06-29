@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Simulado - Segurança da Informação</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #800000;
+      color: #fff;
+      padding: 20px;
+    }
+    h1 {
+      color: #ffd700;
+    }
+    select, input, button, a.btn {
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 5px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    button, a.btn {
+      background-color: #e67e22;
+      color: white;
+      border: none;
+    }
+    .questao {
+      background: #fff;
+      color: #000;
+      margin: 15px 0;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .alternativa {
+      margin: 5px 0;
+    }
+    .resposta {
+      margin-top: 10px;
+      color: green;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<a href="/simulados" target="_top" style="
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #e67e22;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-bottom: 20px;
+">🔙 VOLTAR</a>
+
+<h1>Simulado - Segurança da Informação</h1>
+
+<label>Quantidade de questões:</label>
+<input type="number" id="quantidade" value="10" min="1" max="10" /><br>
+
+<label>Nível de dificuldade:</label>
+<select id="nivel">
+  <option>Básico</option>
+  <option>Intermediário</option>
+  <option>Avançado</option>
+  <option>Desafio</option>
+</select><br>
+
+<button onclick="iniciarSimulado()">GERAR SIMULADO</button>
+
+<div id="simulado"></div>
+<button id="mostrarResultado" style="display:none;" onclick="mostrarResultado()">RESULTADOS</button>
+
+<script>
+  const exercicios = [
+    { enunciado: "O que significa a sigla 'SGSI'?", alternativas: ["Sistema de Gestão de Segurança da Informação", "Serviço de Gerenciamento de Sistemas Internos", "Segurança Geral de Sistemas Integrados", "Sistema de Garantia de Segurança de Internet", "Serviço de Geração de Sistemas Inteligentes"], correta: "A" },
+    { enunciado: "Qual destas NÃO é uma das três bases da Segurança da Informação (CIA)?", alternativas: ["Confidencialidade", "Integridade", "Autenticidade", "Disponibilidade", "Nenhuma das anteriores"], correta: "C" },
+    { enunciado: "O que é phishing?", alternativas: ["Ataque de força bruta", "Técnica para roubar dados via e-mail ou sites falsos", "Vírus autorreplicante", "Firewall mal configurado", "Backup mal feito"], correta: "B" },
+    { enunciado: "O que é criptografia?", alternativas: ["Processo de proteção de dados por meio de codificação", "Firewall de hardware", "Sistema de autenticação biométrica", "Tipo de malware", "Método de compressão de arquivos"], correta: "A" },
+    { enunciado: "O que representa um ataque DoS?", alternativas: ["Interceptação de comunicações", "Acesso físico não autorizado", "Negação de serviço", "Injeção de SQL", "Falsificação de identidade"], correta: "C" },
+    { enunciado: "Qual é o objetivo de um firewall?", alternativas: ["Filtrar tráfego de rede", "Armazenar arquivos", "Realizar backups", "Criar usuários", "Enviar e-mails"], correta: "A" },
+    { enunciado: "Qual destes é um método de autenticação?", alternativas: ["Senha", "Token", "Biometria", "Todos os anteriores", "Nenhum dos anteriores"], correta: "D" },
+    { enunciado: "O que é um malware?", alternativas: ["Software de segurança", "Aplicação de produtividade", "Programa malicioso", "Sistema operacional", "Antivírus"], correta: "C" },
+    { enunciado: "Qual desses é um exemplo de controle de acesso físico?", alternativas: ["Cartão magnético", "Login e senha", "Firewall", "Antivírus", "VPN"], correta: "A" },
+    { enunciado: "Qual é a finalidade de um antivírus?", alternativas: ["Proteger contra software malicioso", "Realizar backups", "Criptografar dados", "Bloquear portas de rede", "Gerenciar permissões de usuário"], correta: "A" }
+  ];
+
+  let questaoAtual = 0;
+  let totalQuestoes = 0;
+
+  function iniciarSimulado() {
+    questaoAtual = 0;
+    totalQuestoes = parseInt(document.getElementById('quantidade').value);
+    document.getElementById('mostrarResultado').style.display = 'none';
+    mostrarProximaQuestao();
+  }
+
+  function mostrarProximaQuestao() {
+    const container = document.getElementById('simulado');
+    container.innerHTML = '';
+
+    if (questaoAtual < totalQuestoes && questaoAtual < exercicios.length) {
+      const ex = exercicios[questaoAtual];
+      const div = document.createElement('div');
+      div.className = 'questao';
+      div.innerHTML = `<p><strong>Questão ${questaoAtual + 1}:</strong> ${ex.enunciado}</p>`;
+      ex.alternativas.forEach((alt, idx) => {
+        const letra = String.fromCharCode(65 + idx);
+        div.innerHTML += `
+          <div class='alternativa'>
+            <label>
+              <input type='radio' name='q${questaoAtual}' value='${letra}'> ${letra}) ${alt}
+            </label>
+          </div>
+        `;
+      });
+
+      div.innerHTML += `<button onclick="mostrarProximaQuestao()">PRÓXIMO</button>`;
+      container.appendChild(div);
+      questaoAtual++;
+    } else {
+      document.getElementById('mostrarResultado').style.display = 'inline-block';
+    }
+  }
+
+  function mostrarResultado() {
+    let acertos = 0;
+    for (let i = 0; i < questaoAtual; i++) {
+      const respostaCorreta = exercicios[i].correta;
+      const selecionada = document.querySelector(`input[name='q${i}']:checked`);
+      if (selecionada && selecionada.value === respostaCorreta) {
+        acertos++;
+      }
+    }
+    alert(`Você acertou ${acertos} de ${questaoAtual} questões. (${Math.round((acertos/questaoAtual)*100)}%)`);
+  }
+</script>
+
+</body>
+</html>

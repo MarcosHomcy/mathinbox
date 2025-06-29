@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Simulado - Energias Renováveis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #5c3300;
+      color: #fff;
+      padding: 20px;
+    }
+    h1 {
+      color: #ffd700;
+    }
+    select, input, button, a.btn {
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 5px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    button, a.btn {
+      background-color: #e67e22;
+      color: white;
+      border: none;
+    }
+    .questao {
+      background: #fff;
+      color: #000;
+      margin: 15px 0;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .alternativa {
+      margin: 5px 0;
+    }
+    .resposta {
+      margin-top: 10px;
+      color: green;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<a href="/simulados" target="_top" style="
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #e67e22;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-bottom: 20px;
+">🔙 VOLTAR</a>
+
+<h1>Simulado - Energias Renováveis</h1>
+
+<label>Quantidade de questões:</label>
+<input type="number" id="quantidade" value="10" min="1" max="20" /><br>
+
+<label>Nível de dificuldade:</label>
+<select id="nivel">
+  <option>Básico</option>
+  <option>Intermediário</option>
+  <option>Avançado</option>
+  <option>Desafio</option>
+</select><br>
+
+<button onclick="iniciarSimulado()">GERAR SIMULADO</button>
+
+<div id="simulado"></div>
+<button id="mostrarResultado" style="display:none;" onclick="mostrarResultado()">RESULTADOS</button>
+
+<script>
+  const exercicios = [
+    { enunciado: "O que são energias renováveis?", alternativas: ["Fontes que se esgotam rapidamente", "Fontes que se renovam naturalmente", "Fontes derivadas de combustíveis fósseis", "Fontes nucleares", "Fontes de origem mineral"], correta: "B" },
+    { enunciado: "Qual dessas é uma fonte de energia solar?", alternativas: ["Turbina eólica", "Painel fotovoltaico", "Gerador hidroelétrico", "Reator nuclear", "Motor a diesel"], correta: "B" },
+    { enunciado: "A energia eólica é gerada através de:", alternativas: ["Calor da terra", "Radiação solar", "Movimento do vento", "Queima de carvão", "Reações químicas"], correta: "C" },
+    { enunciado: "O biodiesel é produzido a partir de:", alternativas: ["Petróleo", "Gás natural", "Biomassa vegetal", "Carvão mineral", "Uranio"], correta: "C" },
+    { enunciado: "O que caracteriza a energia hidráulica?", alternativas: ["Uso de painéis solares", "Utilização de turbinas movidas por água", "Conversão direta de biomassa", "Captura de CO2", "Uso de células de combustível"], correta: "B" }
+  ];
+
+  let questaoAtual = 0;
+  let totalQuestoes = 0;
+
+  function iniciarSimulado() {
+    questaoAtual = 0;
+    totalQuestoes = parseInt(document.getElementById('quantidade').value);
+    document.getElementById('mostrarResultado').style.display = 'none';
+    mostrarProximaQuestao();
+  }
+
+  function mostrarProximaQuestao() {
+    const container = document.getElementById('simulado');
+    container.innerHTML = '';
+
+    if (questaoAtual < totalQuestoes && questaoAtual < exercicios.length) {
+      const ex = exercicios[questaoAtual];
+      const div = document.createElement('div');
+      div.className = 'questao';
+      div.innerHTML = `<p><strong>Questão ${questaoAtual + 1}:</strong> ${ex.enunciado}</p>`;
+      ex.alternativas.forEach((alt, idx) => {
+        const letra = String.fromCharCode(65 + idx);
+        div.innerHTML += `
+          <div class='alternativa'>
+            <label>
+              <input type='radio' name='q${questaoAtual}' value='${letra}'> ${letra}) ${alt}
+            </label>
+          </div>
+        `;
+      });
+
+      div.innerHTML += `<button onclick="mostrarProximaQuestao()">PRÓXIMO</button>`;
+      container.appendChild(div);
+      questaoAtual++;
+    } else {
+      document.getElementById('mostrarResultado').style.display = 'inline-block';
+    }
+  }
+
+  function mostrarResultado() {
+    let acertos = 0;
+    for (let i = 0; i < questaoAtual; i++) {
+      const respostaCorreta = exercicios[i].correta;
+      const selecionada = document.querySelector(`input[name='q${i}']:checked`);
+      if (selecionada && selecionada.value === respostaCorreta) {
+        acertos++;
+      }
+    }
+    alert(`Você acertou ${acertos} de ${questaoAtual} questões. (${Math.round((acertos/questaoAtual)*100)}%)`);
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Simulado - Eletricidade e Eletrônica</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #2c3e50;
+      color: #fff;
+      padding: 20px;
+    }
+    h1 {
+      color: #ffd700;
+    }
+    select, input, button, a.btn {
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 5px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    button, a.btn {
+      background-color: #e67e22;
+      color: white;
+      border: none;
+    }
+    .questao {
+      background: #fff;
+      color: #000;
+      margin: 15px 0;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .alternativa {
+      margin: 5px 0;
+    }
+    .resposta {
+      margin-top: 10px;
+      color: green;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<a href="/simulados" target="_top" style="
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #e67e22;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-bottom: 20px;
+">🔙 VOLTAR</a>
+
+<h1>Simulado - Eletricidade e Eletrônica</h1>
+
+<label>Quantidade de questões:</label>
+<input type="number" id="quantidade" value="10" min="1" max="10" /><br>
+
+<label>Nível de dificuldade:</label>
+<select id="nivel">
+  <option>Básico</option>
+  <option>Intermediário</option>
+  <option>Avançado</option>
+  <option>Desafio</option>
+</select><br>
+
+<button onclick="iniciarSimulado()">GERAR SIMULADO</button>
+
+<div id="simulado"></div>
+<button id="mostrarResultado" style="display:none;" onclick="mostrarResultado()">RESULTADOS</button>
+
+<script>
+  const exercicios = [
+    { enunciado: "O que é corrente elétrica?", alternativas: ["Fluxo de elétrons", "Resistência de um material", "Tensão aplicada", "Potência dissipada", "Carga elétrica parada"], correta: "A" },
+    { enunciado: "Unidade de medida da tensão elétrica:", alternativas: ["Ampere", "Ohm", "Volt", "Watt", "Farad"], correta: "C" },
+    { enunciado: "O que é resistência elétrica?", alternativas: ["Capacidade de armazenar carga", "Força que impede o fluxo de corrente", "Velocidade de propagação dos elétrons", "Diferença de potencial", "Energia consumida"], correta: "B" },
+    { enunciado: "Lei de Ohm relaciona:", alternativas: ["Potência, corrente e tensão", "Resistência, corrente e tensão", "Capacitância, indutância e frequência", "Temperatura e resistência", "Corrente e frequência"], correta: "B" },
+    { enunciado: "Unidade de potência elétrica:", alternativas: ["Watt", "Volt", "Ampere", "Ohm", "Joule"], correta: "A" },
+    { enunciado: "Qual destes é um componente passivo?", alternativas: ["Transistor", "Diodo", "Resistor", "CI", "Relé"], correta: "C" },
+    { enunciado: "O que faz um capacitor?", alternativas: ["Resiste ao fluxo de corrente", "Armazena energia na forma de campo elétrico", "Amplifica sinais", "Converte corrente contínua", "Gera campos magnéticos"], correta: "B" },
+    { enunciado: "O que é um circuito em série?", alternativas: ["Corrente se divide em vários caminhos", "Corrente tem um único caminho", "Não há fluxo de corrente", "Alta resistência total", "Circuito com várias fontes"], correta: "B" },
+    { enunciado: "Qual é a unidade de capacitância?", alternativas: ["Ohm", "Henry", "Farad", "Joule", "Volt"], correta: "C" },
+    { enunciado: "O que é um diodo?", alternativas: ["Componente que só permite o fluxo de corrente em uma direção", "Resistor variável", "Armazenador de energia", "Fonte de corrente alternada", "Filtro de ruído"], correta: "A" }
+  ];
+
+  let questaoAtual = 0;
+  let totalQuestoes = 0;
+
+  function iniciarSimulado() {
+    questaoAtual = 0;
+    totalQuestoes = parseInt(document.getElementById('quantidade').value);
+    document.getElementById('mostrarResultado').style.display = 'none';
+    mostrarProximaQuestao();
+  }
+
+  function mostrarProximaQuestao() {
+    const container = document.getElementById('simulado');
+    container.innerHTML = '';
+
+    if (questaoAtual < totalQuestoes && questaoAtual < exercicios.length) {
+      const ex = exercicios[questaoAtual];
+      const div = document.createElement('div');
+      div.className = 'questao';
+      div.innerHTML = `<p><strong>Questão ${questaoAtual + 1}:</strong> ${ex.enunciado}</p>`;
+      ex.alternativas.forEach((alt, idx) => {
+        const letra = String.fromCharCode(65 + idx);
+        div.innerHTML += `
+          <div class='alternativa'>
+            <label>
+              <input type='radio' name='q${questaoAtual}' value='${letra}'> ${letra}) ${alt}
+            </label>
+          </div>
+        `;
+      });
+
+      div.innerHTML += `<button onclick="mostrarProximaQuestao()">PRÓXIMO</button>`;
+      container.appendChild(div);
+      questaoAtual++;
+    } else {
+      document.getElementById('mostrarResultado').style.display = 'inline-block';
+    }
+  }
+
+  function mostrarResultado() {
+    let acertos = 0;
+    for (let i = 0; i < questaoAtual; i++) {
+      const respostaCorreta = exercicios[i].correta;
+      const selecionada = document.querySelector(`input[name='q${i}']:checked`);
+      if (selecionada && selecionada.value === respostaCorreta) {
+        acertos++;
+      }
+    }
+    alert(`Você acertou ${acertos} de ${questaoAtual} questões. (${Math.round((acertos/questaoAtual)*100)}%)`);
+  }
+</script>
+
+</body>
+</html>

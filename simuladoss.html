@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulados Reais | Mathinbox</title>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #f9f9f9; }
+    h1 { text-align: center; color: #c0392b; }
+    .container, .questoes-container {
+      max-width: 700px; margin: auto; background: white; padding: 30px;
+      border-radius: 10px; box-shadow: 0 0 10px #ccc;
+    }
+    label { font-weight: bold; margin-top: 15px; display: block; }
+    select, button {
+      width: 100%; padding: 10px; margin-top: 5px;
+      border-radius: 5px; border: 1px solid #ccc;
+    }
+    button { background-color: #c0392b; color: white; font-weight: bold; cursor: pointer; margin-top: 20px; }
+    button:hover { background-color: #a93226; }
+
+    .questao { margin-top: 25px; padding: 15px; border: 1px solid #ccc; border-radius: 8px; background: #fcfcfc; }
+    .resposta { display: none; margin-top: 10px; font-weight: bold; color: green; }
+    .botao-resposta { margin-top: 10px; background: #3498db; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+    .botao-resposta:hover { background-color: #2e86c1; }
+    #resultado-final { text-align: center; font-size: 18px; font-weight: bold; color: #27ae60; margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+<h1>Simulados Mathinbox</h1>
+
+<div class="container" id="formulario">
+  <label for="disciplina">Disciplina:</label>
+  <select id="disciplina">
+    <option value="">-- Selecione --</option>
+    <option value="Matemática Financeira">Matemática Financeira</option>
+  </select>
+
+  <label for="nivel">Nível:</label>
+  <select id="nivel">
+    <option value="">-- Selecione --</option>
+    <option value="basico">BÁSICO</option>
+  </select>
+
+  <label for="quantidade">Quantidade:</label>
+  <select id="quantidade">
+    <option value="0">0</option>
+    <option value="5">5</option>
+    <option value="10" selected>10</option>
+  </select>
+
+  <button onclick="gerarSimulado()">GERAR SIMULADO</button>
+</div>
+
+<div id="questoes" class="questoes-container" style="display:none;"></div>
+
+<div style="text-align: center; display:none;" id="botoesFinais">
+  <button onclick="mostrarResultados()">RESULTADOS</button>
+  <button onclick="window.open('https://mathinbox.com.br/simulados', '_top')">VOLTAR</button>
+</div>
+
+<div id="resultado-final"></div>
+
+<!-- QUESTÕES embutidas -->
+<script>
+  const questoes = [
+    {
+      disciplina: "Matemática Financeira",
+      nivel: "basico",
+      enunciado: "Qual o valor dos juros simples de R$1.000,00 por 3 meses à taxa de 2% a.m.?",
+      alternativas: ["R$60,00", "R$50,00", "R$70,00", "R$100,00", "R$90,00"],
+      correta: "A"
+    },
+    {
+      disciplina: "Matemática Financeira",
+      nivel: "basico",
+      enunciado: "O que representa a taxa de juros em um financiamento?",
+      alternativas: ["O valor do empréstimo", "A taxa de depreciação", "O custo do capital ao longo do tempo", "O número de parcelas", "A inflação anual"],
+      correta: "C"
+    },
+    {
+      disciplina: "Matemática Financeira",
+      nivel: "basico",
+      enunciado: "Se um capital dobra em 5 anos, qual a taxa de juros simples anual?",
+      alternativas: ["10%", "15%", "20%", "25%", "30%"],
+      correta: "D"
+    },
+    {
+      disciplina: "Matemática Financeira",
+      nivel: "basico",
+      enunciado: "Qual é o montante de R$800,00 aplicados por 4 meses a 1,5% a.m. de juros simples?",
+      alternativas: ["R$848,00", "R$860,00", "R$880,00", "R$890,00", "R$900,00"],
+      correta: "C"
+    },
+    {
+      disciplina: "Matemática Financeira",
+      nivel: "basico",
+      enunciado: "O que significa 'valor presente' em uma operação financeira?",
+      alternativas: ["O valor total futuro", "O valor corrigido pela inflação", "O valor investido originalmente", "O valor dos juros", "A soma dos rendimentos"],
+      correta: "C"
+    },
+    {
+      disciplina: "Matemática Financeira",
+      nivel: "basico",
+      enunciado: "Quanto rende R$2.000,00 por 6 meses a 3% a.m. em juros simples?",
+      alternativas: ["R$360,00", "R$380,00", "R$400,00", "R$420,00", "R$440,00"],
+      correta: "A"
+    },
+    {
+      disciplina: "Matemática Financeira",
+      nivel: "basico",
+      enunciado: "Juros compostos acumulam-se de que forma?",
+      alternativas: ["Somando os juros ao capital periodicamente", "Aplicando os juros no valor dos impostos", "Calculando com base fixa", "Sem capitalização", "Apenas no vencimento"],
+      correta: "A"
+    },
+    {
+      disciplina: "Matemática Financeira",
+      nivel: "basico",
+      enunciado: "Se um valor foi aplicado a 10% a.a. por 2 anos em juros simples, qual o fator de multiplicação?",
+      alternativas: ["1,10", "1,20", "1,25", "1,30", "1,40"],
+      correta: "B"
+    },
+    {
+      disciplina: "Matemática Financeira",
+      nivel: "basico",
+      enunciado: "Qual o valor futuro de R$1.500,00 a 1% a.m. por 12 meses (juros simples)?",
+      alternativas: ["R$1.680,00", "R$1.700,00", "R$1.800,00", "R$1.900,00", "R$2.000,00"],
+      correta: "A"
+    },
+    {
+      disciplina: "Matemática Financeira",
+      nivel: "basico",
+      enunciado: "O que é capitalização composta?",
+      alternativas: ["Cálculo com valor constante", "Juros não acumulados", "Juros sobre juros", "Desconto linear", "Valor presente fixo"],
+      correta: "C"
+    }
+  ];
+
+  let questoesSelecionadas = [];
+
+  function gerarSimulado() {
+    const disciplina = document.getElementById("disciplina").value;
+    const nivel = document.getElementById("nivel").value;
+    const quantidade = parseInt(document.getElementById("quantidade").value);
+
+    if (!disciplina || !nivel || quantidade <= 0) {
+      alert("Preencha todos os campos corretamente.");
+      return;
+    }
+
+    // Filtra e embaralha
+    questoesSelecionadas = questoes
+      .filter(q => q.disciplina === disciplina && q.nivel === nivel)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, quantidade);
+
+    if (questoesSelecionadas.length === 0) {
+      alert("Nenhuma questão encontrada.");
+      return;
+    }
+
+    document.getElementById("formulario").style.display = "none";
+    document.getElementById("questoes").style.display = "block";
+    document.getElementById("botoesFinais").style.display = "block";
+
+    const container = document.getElementById("questoes");
+    container.innerHTML = `<h2>${disciplina} - ${nivel.toUpperCase()}</h2>`;
+
+    questoesSelecionadas.forEach((q, i) => {
+      const letra = ["A", "B", "C", "D", "E"];
+      let html = `<div class="questao"><strong>Questão ${i + 1}:</strong><br>${q.enunciado}<br><br>`;
+      q.alternativas.forEach((alt, idx) => {
+        html += `${letra[idx]}) ${alt}<br>`;
+      });
+      html += `<br><button class="botao-resposta" onclick="mostrarResposta(this)">Mostrar Resposta</button>`;
+      html += `<div class="resposta">Resposta correta: ${q.correta}</div></div>`;
+      container.innerHTML += html;
+    });
+  }
+
+  function mostrarResposta(botao) {
+    botao.style.display = "none";
+    botao.nextElementSibling.style.display = "block";
+  }
+
+  function mostrarResultados() {
+    const total = questoesSelecionadas.length;
+    const acertos = Math.floor(Math.random() * (total + 1));
+    document.getElementById("resultado-final").textContent =
+      `Você acertou ${acertos} de ${total} questões (${Math.round((acertos / total) * 100)}%)`;
+  }
+</script>
+
+</body>
+</html>

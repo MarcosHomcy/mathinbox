@@ -1,0 +1,29 @@
+[
+  {
+    "disciplina": "Matemática Financeira",
+    "nivel": "basico",
+    "enunciado": "Qual o valor dos juros simples de R$1.000,00 por 3 meses à taxa de 2% a.m.?",
+    "alternativas": [
+      "R$60,00",
+      "R$50,00",
+      "R$70,00",
+      "R$100,00",
+      "R$90,00"
+    ],
+    "correta": "A"
+  },
+  {
+    "disciplina": "Matemática Financeira",
+    "nivel": "basico",
+    "enunciado": "O que representa a taxa de juros em um financiamento?",
+    "alternativas": [
+      "O valor do empréstimo",
+      "A taxa de depreciação",
+      "O custo do capital ao longo do tempo",
+      "O número de parcelas",
+      "A inflação anual"
+    ],
+    "correta": "C"
+  }
+  // Adicione mais questões com os mesmos campos
+]

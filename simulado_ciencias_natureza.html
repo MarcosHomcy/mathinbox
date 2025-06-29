@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Simulado - Ciências da Natureza</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #006400;
+      color: #fff;
+      padding: 20px;
+    }
+    h1 {
+      color: #ffd700;
+    }
+    select, input, button, a.btn {
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 5px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    button, a.btn {
+      background-color: #e67e22;
+      color: white;
+      border: none;
+    }
+    .questao {
+      background: #fff;
+      color: #000;
+      margin: 15px 0;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .alternativa {
+      margin: 5px 0;
+    }
+    .resposta {
+      margin-top: 10px;
+      color: green;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<a href="/simulados" target="_top" style="
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #e67e22;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-bottom: 20px;
+">🔙 VOLTAR</a>
+
+<h1>Simulado - Ciências da Natureza</h1>
+
+<label>Quantidade de questões:</label>
+<input type="number" id="quantidade" value="10" min="1" max="10" /><br>
+
+<label>Nível de dificuldade:</label>
+<select id="nivel">
+  <option>Básico</option>
+  <option>Intermediário</option>
+  <option>Avançado</option>
+  <option>Desafio</option>
+</select><br>
+
+<button onclick="iniciarSimulado()">GERAR SIMULADO</button>
+
+<div id="simulado"></div>
+<button id="mostrarResultado" style="display:none;" onclick="mostrarResultado()">RESULTADOS</button>
+
+<script>
+  const exercicios = [
+    { enunciado: "Qual é a principal fonte de energia para os seres vivos?", alternativas: ["Sol", "Lua", "Água", "Oxigênio", "Carbono"], correta: "A" },
+    { enunciado: "Qual destes é um estado físico da matéria?", alternativas: ["Líquido", "Gasoso", "Sólido", "Plasma", "Todos os anteriores"], correta: "E" },
+    { enunciado: "A fórmula química da água é:", alternativas: ["H2O", "CO2", "O2", "CH4", "NaCl"], correta: "A" },
+    { enunciado: "Qual o principal gás responsável pelo efeito estufa?", alternativas: ["Oxigênio", "Hidrogênio", "Gás Carbônico", "Nitrogênio", "Hélio"], correta: "C" },
+    { enunciado: "O que é fotossíntese?", alternativas: ["Respiração celular", "Produção de energia por plantas", "Evaporação da água", "Digestão de alimentos", "Movimento das placas tectônicas"], correta: "B" },
+    { enunciado: "Qual unidade de medida é usada para força?", alternativas: ["Newton", "Watt", "Pascal", "Joule", "Ampere"], correta: "A" },
+    { enunciado: "Qual partícula subatômica tem carga negativa?", alternativas: ["Próton", "Nêutron", "Elétron", "Fóton", "Íon"], correta: "C" },
+    { enunciado: "A camada de ozônio protege a Terra de:", alternativas: ["Radiação ultravioleta", "Gases tóxicos", "Poluição sonora", "Ventos solares", "Radiação infravermelha"], correta: "A" },
+    { enunciado: "A energia potencial gravitacional depende de:", alternativas: ["Temperatura", "Velocidade", "Altura e massa", "Área", "Pressão"], correta: "C" },
+    { enunciado: "Qual destes não é um órgão do sistema digestivo humano?", alternativas: ["Estômago", "Fígado", "Pâncreas", "Pulmão", "Intestino"], correta: "D" }
+  ];
+
+  let questaoAtual = 0;
+  let totalQuestoes = 0;
+
+  function iniciarSimulado() {
+    questaoAtual = 0;
+    totalQuestoes = parseInt(document.getElementById('quantidade').value);
+    document.getElementById('mostrarResultado').style.display = 'none';
+    mostrarProximaQuestao();
+  }
+
+  function mostrarProximaQuestao() {
+    const container = document.getElementById('simulado');
+    container.innerHTML = '';
+
+    if (questaoAtual < totalQuestoes && questaoAtual < exercicios.length) {
+      const ex = exercicios[questaoAtual];
+      const div = document.createElement('div');
+      div.className = 'questao';
+      div.innerHTML = `<p><strong>Questão ${questaoAtual + 1}:</strong> ${ex.enunciado}</p>`;
+      ex.alternativas.forEach((alt, idx) => {
+        const letra = String.fromCharCode(65 + idx);
+        div.innerHTML += `
+          <div class='alternativa'>
+            <label>
+              <input type='radio' name='q${questaoAtual}' value='${letra}'> ${letra}) ${alt}
+            </label>
+          </div>
+        `;
+      });
+
+      div.innerHTML += `<button onclick="mostrarProximaQuestao()">PRÓXIMO</button>`;
+      container.appendChild(div);
+      questaoAtual++;
+    } else {
+      document.getElementById('mostrarResultado').style.display = 'inline-block';
+    }
+  }
+
+  function mostrarResultado() {
+    let acertos = 0;
+    for (let i = 0; i < questaoAtual; i++) {
+      const respostaCorreta = exercicios[i].correta;
+      const selecionada = document.querySelector(`input[name='q${i}']:checked`);
+      if (selecionada && selecionada.value === respostaCorreta) {
+        acertos++;
+      }
+    }
+    alert(`Você acertou ${acertos} de ${questaoAtual} questões. (${Math.round((acertos/questaoAtual)*100)}%)`);
+  }
+</script>
+
+</body>
+</html>

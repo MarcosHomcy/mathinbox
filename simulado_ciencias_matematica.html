@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Simulado - Ciências da Matemática</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #003366;
+      color: #fff;
+      padding: 20px;
+    }
+    h1 {
+      color: #ffd700;
+    }
+    select, input, button, a.btn {
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 5px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    button, a.btn {
+      background-color: #e67e22;
+      color: white;
+      border: none;
+    }
+    .questao {
+      background: #fff;
+      color: #000;
+      margin: 15px 0;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .alternativa {
+      margin: 5px 0;
+    }
+    .resposta {
+      margin-top: 10px;
+      color: green;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<a href="/simulados" target="_top" style="
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #e67e22;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-bottom: 20px;
+">🔙 VOLTAR</a>
+
+<h1>Simulado - Ciências da Matemática</h1>
+
+<label>Quantidade de questões:</label>
+<input type="number" id="quantidade" value="10" min="1" max="10" /><br>
+
+<label>Nível de dificuldade:</label>
+<select id="nivel">
+  <option>Básico</option>
+  <option>Intermediário</option>
+  <option>Avançado</option>
+  <option>Desafio</option>
+</select><br>
+
+<button onclick="iniciarSimulado()">GERAR SIMULADO</button>
+
+<div id="simulado"></div>
+<button id="mostrarResultado" style="display:none;" onclick="mostrarResultado()">RESULTADOS</button>
+
+<script>
+  const exercicios = [
+    { enunciado: "Quanto é 7 + 5?", alternativas: ["10", "11", "12", "13", "14"], correta: "C" },
+    { enunciado: "Resolva: 15 ÷ 3", alternativas: ["4", "5", "6", "7", "8"], correta: "B" },
+    { enunciado: "Qual a fração equivalente a 1/2?", alternativas: ["2/4", "3/6", "4/8", "Todas as anteriores", "Nenhuma das anteriores"], correta: "D" },
+    { enunciado: "O perímetro de um quadrado com lado 6cm é:", alternativas: ["12cm", "18cm", "24cm", "30cm", "36cm"], correta: "C" },
+    { enunciado: "Resolva: 3x = 12. O valor de x é:", alternativas: ["2", "3", "4", "5", "6"], correta: "C" },
+    { enunciado: "Quanto é 8²?", alternativas: ["16", "32", "48", "64", "128"], correta: "D" },
+    { enunciado: "Área de um triângulo com base 10cm e altura 6cm:", alternativas: ["30cm²", "60cm²", "15cm²", "40cm²", "20cm²"], correta: "A" },
+    { enunciado: "Qual é a raiz quadrada de 49?", alternativas: ["5", "6", "7", "8", "9"], correta: "C" },
+    { enunciado: "Quanto é 25% de 80?", alternativas: ["10", "15", "20", "25", "30"], correta: "C" },
+    { enunciado: "Qual é a solução da equação x² = 16?", alternativas: ["2", "4", "-4", "4 ou -4", "Nenhuma das anteriores"], correta: "D" }
+  ];
+
+  let questaoAtual = 0;
+  let totalQuestoes = 0;
+
+  function iniciarSimulado() {
+    questaoAtual = 0;
+    totalQuestoes = parseInt(document.getElementById('quantidade').value);
+    document.getElementById('mostrarResultado').style.display = 'none';
+    mostrarProximaQuestao();
+  }
+
+  function mostrarProximaQuestao() {
+    const container = document.getElementById('simulado');
+    container.innerHTML = '';
+
+    if (questaoAtual < totalQuestoes && questaoAtual < exercicios.length) {
+      const ex = exercicios[questaoAtual];
+      const div = document.createElement('div');
+      div.className = 'questao';
+      div.innerHTML = `<p><strong>Questão ${questaoAtual + 1}:</strong> ${ex.enunciado}</p>`;
+      ex.alternativas.forEach((alt, idx) => {
+        const letra = String.fromCharCode(65 + idx);
+        div.innerHTML += `
+          <div class='alternativa'>
+            <label>
+              <input type='radio' name='q${questaoAtual}' value='${letra}'> ${letra}) ${alt}
+            </label>
+          </div>
+        `;
+      });
+
+      div.innerHTML += `<button onclick="mostrarProximaQuestao()">PRÓXIMO</button>`;
+      container.appendChild(div);
+      questaoAtual++;
+    } else {
+      document.getElementById('mostrarResultado').style.display = 'inline-block';
+    }
+  }
+
+  function mostrarResultado() {
+    let acertos = 0;
+    for (let i = 0; i < questaoAtual; i++) {
+      const respostaCorreta = exercicios[i].correta;
+      const selecionada = document.querySelector(`input[name='q${i}']:checked`);
+      if (selecionada && selecionada.value === respostaCorreta) {
+        acertos++;
+      }
+    }
+    alert(`Você acertou ${acertos} de ${questaoAtual} questões. (${Math.round((acertos/questaoAtual)*100)}%)`);
+  }
+</script>
+
+</body>
+</html>

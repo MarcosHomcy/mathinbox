@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simulado - Matemática para Concursos Públicos</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <header class="bg-orange-600 text-white p-4 text-center text-2xl font-bold">
+    Simulado - Matemática para Concursos Públicos
+  </header>
+
+  <main class="p-6 max-w-4xl mx-auto">
+    <section class="bg-white p-6 rounded shadow mb-6">
+      <button onclick="iniciarSimulado()" class="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700">
+        Iniciar Simulado
+      </button>
+    </section>
+
+    <section id="simulado" class="hidden bg-white p-6 rounded shadow">
+      <h2 class="text-xl font-semibold mb-4">Simulado</h2>
+      <div id="questoes"></div>
+    </section>
+  </main>
+
+  <script>
+    const exercicios = [
+      { enunciado: "Quanto é 1 + 1?", resposta: "2" },
+  { enunciado: "Quanto é 1 + 2?", resposta: "3" },
+  { enunciado: "Quanto é 1 + 3?", resposta: "4" },
+  { enunciado: "Quanto é 1 + 4?", resposta: "5" },
+  { enunciado: "Quanto é 1 + 5?", resposta: "6" },
+  { enunciado: "Quanto é 1 + 6?", resposta: "7" },
+  { enunciado: "Quanto é 1 + 7?", resposta: "8" },
+  { enunciado: "Quanto é 1 + 8?", resposta: "9" },
+  { enunciado: "Quanto é 1 + 9?", resposta: "10" },
+  { enunciado: "Quanto é 1 + 10?", resposta: "11" },
+  { enunciado: "Quanto é 2 + 1?", resposta: "3" },
+  { enunciado: "Quanto é 2 + 2?", resposta: "4" },
+  { enunciado: "Quanto é 2 + 3?", resposta: "5" },
+  { enunciado: "Quanto é 2 + 4?", resposta: "6" },
+  { enunciado: "Quanto é 2 + 5?", resposta: "7" },
+  { enunciado: "Quanto é 2 + 6?", resposta: "8" },
+  { enunciado: "Quanto é 2 + 7?", resposta: "9" },
+  { enunciado: "Quanto é 2 + 8?", resposta: "10" },
+  { enunciado: "Quanto é 2 + 9?", resposta: "11" },
+  { enunciado: "Quanto é 2 + 10?", resposta: "12" },
+  { enunciado: "Quanto é 3 + 1?", resposta: "4" },
+  { enunciado: "Quanto é 3 + 2?", resposta: "5" },
+  { enunciado: "Quanto é 3 + 3?", resposta: "6" },
+  { enunciado: "Quanto é 3 + 4?", resposta: "7" },
+  { enunciado: "Quanto é 3 + 5?", resposta: "8" },
+  { enunciado: "Quanto é 3 + 6?", resposta: "9" },
+  { enunciado: "Quanto é 3 + 7?", resposta: "10" },
+  { enunciado: "Quanto é 3 + 8?", resposta: "11" },
+  { enunciado: "Quanto é 3 + 9?", resposta: "12" },
+  { enunciado: "Quanto é 3 + 10?", resposta: "13" },
+  { enunciado: "Quanto é 4 + 1?", resposta: "5" },
+  { enunciado: "Quanto é 4 + 2?", resposta: "6" },
+  { enunciado: "Quanto é 4 + 3?", resposta: "7" },
+  { enunciado: "Quanto é 4 + 4?", resposta: "8" },
+  { enunciado: "Quanto é 4 + 5?", resposta: "9" },
+  { enunciado: "Quanto é 4 + 6?", resposta: "10" },
+  { enunciado: "Quanto é 4 + 7?", resposta: "11" },
+  { enunciado: "Quanto é 4 + 8?", resposta: "12" },
+  { enunciado: "Quanto é 4 + 9?", resposta: "13" },
+  { enunciado: "Quanto é 4 + 10?", resposta: "14" },
+  { enunciado: "Quanto é 5 + 1?", resposta: "6" },
+  { enunciado: "Quanto é 5 + 2?", resposta: "7" },
+  { enunciado: "Quanto é 5 + 3?", resposta: "8" },
+  { enunciado: "Quanto é 5 + 4?", resposta: "9" },
+  { enunciado: "Quanto é 5 + 5?", resposta: "10" },
+  { enunciado: "Quanto é 5 + 6?", resposta: "11" },
+  { enunciado: "Quanto é 5 + 7?", resposta: "12" },
+  { enunciado: "Quanto é 5 + 8?", resposta: "13" },
+  { enunciado: "Quanto é 5 + 9?", resposta: "14" },
+  { enunciado: "Quanto é 5 + 10?", resposta: "15" },
+  { enunciado: "Quanto é 6 + 1?", resposta: "7" },
+  { enunciado: "Quanto é 6 + 2?", resposta: "8" },
+  { enunciado: "Quanto é 6 + 3?", resposta: "9" },
+  { enunciado: "Quanto é 6 + 4?", resposta: "10" },
+  { enunciado: "Quanto é 6 + 5?", resposta: "11" },
+  { enunciado: "Quanto é 6 + 6?", resposta: "12" },
+  { enunciado: "Quanto é 6 + 7?", resposta: "13" },
+  { enunciado: "Quanto é 6 + 8?", resposta: "14" },
+  { enunciado: "Quanto é 6 + 9?", resposta: "15" },
+  { enunciado: "Quanto é 6 + 10?", resposta: "16" },
+  { enunciado: "Quanto é 7 + 1?", resposta: "8" },
+  { enunciado: "Quanto é 7 + 2?", resposta: "9" },
+  { enunciado: "Quanto é 7 + 3?", resposta: "10" },
+  { enunciado: "Quanto é 7 + 4?", resposta: "11" },
+  { enunciado: "Quanto é 7 + 5?", resposta: "12" },
+  { enunciado: "Quanto é 7 + 6?", resposta: "13" },
+  { enunciado: "Quanto é 7 + 7?", resposta: "14" },
+  { enunciado: "Quanto é 7 + 8?", resposta: "15" },
+  { enunciado: "Quanto é 7 + 9?", resposta: "16" },
+  { enunciado: "Quanto é 7 + 10?", resposta: "17" },
+  { enunciado: "Quanto é 8 + 1?", resposta: "9" },
+  { enunciado: "Quanto é 8 + 2?", resposta: "10" },
+  { enunciado: "Quanto é 8 + 3?", resposta: "11" },
+  { enunciado: "Quanto é 8 + 4?", resposta: "12" },
+  { enunciado: "Quanto é 8 + 5?", resposta: "13" },
+  { enunciado: "Quanto é 8 + 6?", resposta: "14" },
+  { enunciado: "Quanto é 8 + 7?", resposta: "15" },
+  { enunciado: "Quanto é 8 + 8?", resposta: "16" },
+  { enunciado: "Quanto é 8 + 9?", resposta: "17" },
+  { enunciado: "Quanto é 8 + 10?", resposta: "18" },
+  { enunciado: "Quanto é 9 + 1?", resposta: "10" },
+  { enunciado: "Quanto é 9 + 2?", resposta: "11" },
+  { enunciado: "Quanto é 9 + 3?", resposta: "12" },
+  { enunciado: "Quanto é 9 + 4?", resposta: "13" },
+  { enunciado: "Quanto é 9 + 5?", resposta: "14" },
+  { enunciado: "Quanto é 9 + 6?", resposta: "15" },
+  { enunciado: "Quanto é 9 + 7?", resposta: "16" },
+  { enunciado: "Quanto é 9 + 8?", resposta: "17" },
+  { enunciado: "Quanto é 9 + 9?", resposta: "18" },
+  { enunciado: "Quanto é 9 + 10?", resposta: "19" },
+  { enunciado: "Quanto é 10 + 1?", resposta: "11" },
+  { enunciado: "Quanto é 10 + 2?", resposta: "12" },
+  { enunciado: "Quanto é 10 + 3?", resposta: "13" },
+  { enunciado: "Quanto é 10 + 4?", resposta: "14" },
+  { enunciado: "Quanto é 10 + 5?", resposta: "15" },
+  { enunciado: "Quanto é 10 + 6?", resposta: "16" },
+  { enunciado: "Quanto é 10 + 7?", resposta: "17" },
+  { enunciado: "Quanto é 10 + 8?", resposta: "18" },
+  { enunciado: "Quanto é 10 + 9?", resposta: "19" },
+  { enunciado: "Quanto é 10 + 10?", resposta: "20" }
+    ];
+
+    function iniciarSimulado() {
+      const container = document.getElementById('questoes');
+      container.innerHTML = "";
+
+      exercicios.forEach(function(q, index) {
+        const bloco = document.createElement('div');
+        bloco.className = 'mb-4 p-4 border rounded bg-gray-50';
+        bloco.innerHTML = `
+          <p><strong>Questão ${index + 1}:</strong> ${q.enunciado}</p>
+          <button onclick="mostrarResposta(this, '${q.resposta}')" class="mt-2 bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
+            Mostrar Resposta
+          </button>
+          <p class="mt-2 resposta hidden text-green-700 font-semibold"></p>
+        `;
+        container.appendChild(bloco);
+      });
+
+      document.getElementById('simulado').classList.remove('hidden');
+    }
+
+    function mostrarResposta(botao, resposta) {
+      const respostaEl = botao.nextElementSibling;
+      respostaEl.textContent = resposta;
+      respostaEl.classList.remove('hidden');
+      botao.disabled = true;
+    }
+  </script>
+
+</body>
+</html>

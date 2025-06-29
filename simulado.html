@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulado</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      padding: 2rem;
+    }
+    h1 {
+      color: #333;
+    }
+    .questao {
+      background: white;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .alternativa {
+      display: block;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .alternativa:hover {
+      background-color: #f0f0f0;
+    }
+    .correta {
+      background-color: #c8e6c9;
+    }
+    .incorreta {
+      background-color: #ffcdd2;
+    }
+    #resultadoFinal {
+      display: none;
+      text-align: center;
+      margin-top: 2rem;
+    }
+    .btn {
+      background-color: #ff6a00;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background-color: #e25900;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="tituloSimulado">Simulado</h1>
+  <div id="questoes"></div>
+  <div id="resultadoFinal">
+    <button class="btn" onclick="mostrarPontuacao()">Ver Resultado Final</button>
+    <p id="pontuacao"></p>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const grupo = params.get("grupo");
+    const disciplina = params.get("disciplina");
+    const qtd = parseInt(params.get("qtd")) || 10;
+    const nivel = params.get("nivel");
+
+    document.getElementById("tituloSimulado").textContent = `Simulado - ${disciplina}`;
+
+    function normalizarNome(nome) {
+      return nome
+        .toLowerCase()
+        .normalize("NFD").replace(/\p{Diacritic}/gu, "")
+        .replace(/[^a-z0-9 ]/g, "")
+        .replace(/\s+/g, "_");
+    }
+
+    const arquivo = `dados/${normalizarNome(disciplina)}.json`;
+
+    let acertos = 0;
+    let respondidas = 0;
+
+    fetch(arquivo)
+      .then(res => res.json())
+      .then(dados => {
+        const questoes = dados.filter(q => q.nivel === nivel || !q.nivel).slice(0, qtd);
+        const container = document.getElementById("questoes");
+
+        questoes.forEach((q, idx) => {
+          const qBox = document.createElement("div");
+          qBox.className = "questao";
+
+          const titulo = document.createElement("p");
+          titulo.innerHTML = `<strong>${idx + 1}.</strong> ${q.enunciado}`;
+          qBox.appendChild(titulo);
+
+          q.alternativas.forEach((alt, i) => {
+            const btn = document.createElement("div");
+            btn.className = "alternativa";
+            btn.textContent = `${String.fromCharCode(65 + i)}) ${alt}`;
+            btn.onclick = () => {
+              if (btn.classList.contains("correta") || btn.classList.contains("incorreta")) return;
+
+              respondidas++;
+              if (i === q.correta) {
+                btn.classList.add("correta");
+                acertos++;
+              } else {
+                btn.classList.add("incorreta");
+                const correta = btn.parentNode.querySelectorAll(".alternativa")[q.correta];
+                correta.classList.add("correta");
+              }
+
+              if (respondidas === questoes.length) {
+                document.getElementById("resultadoFinal").style.display = "block";
+              }
+            };
+            qBox.appendChild(btn);
+          });
+
+          container.appendChild(qBox);
+        });
+      })
+      .catch(err => {
+        document.getElementById("questoes").innerHTML = "<p>Erro ao carregar as questões. Verifique o nome do arquivo JSON.</p>";
+      });
+
+    function mostrarPontuacao() {
+      const nota = Math.round((acertos / respondidas) * 100);
+      document.getElementById("pontuacao").textContent = `Você acertou ${acertos} de ${respondidas} questões (${nota}%)`;
+    }
+  </script>
+</body>
+</html>

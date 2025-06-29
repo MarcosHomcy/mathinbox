@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Simulado - Fundamentos de Robotica</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #004080; }
+        .questao { margin-bottom: 40px; }
+        .resposta { display: none; background-color: #ffffcc; padding: 10px; border-left: 4px solid #ffcc00; }
+        button { background-color: #FFD700; padding: 8px 16px; border: none; cursor: pointer; }
+    </style>
+    <script>
+        function mostrarResposta(id) {
+            var el = document.getElementById(id);
+            el.style.display = "block";
+        }
+    </script>
+</head>
+<body>
+    <h1>Simulado - Fundamentos de Robotica</h1>
+    <div class="questao">
+        <p><strong>Questão 1:</strong> (exemplo de conteúdo da disciplina Fundamentos de Robotica)</p>
+        <ul>
+            <li>A) Alternativa A</li>
+            <li>B) Alternativa B</li>
+            <li>C) Alternativa C</li>
+            <li>D) Alternativa D</li>
+            <li>E) Alternativa E</li>
+        </ul>
+        <button onclick="mostrarResposta('resposta1')">Mostrar Resposta</button>
+        <div class="resposta" id="resposta1">
+            <strong>Resposta:</strong> Alternativa correta é a C. Explicação aqui.
+        </div>
+    </div>
+    <button onclick="window.open('https://mathinbox.com.br/simulados', '_top')">VOLTAR</button>
+</body>
+</html>
